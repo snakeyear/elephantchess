@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Scholar's Board | Xiangqi Mastery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .xiangi-grid-line {
+            background-color: #504441;
+        }
+        .wood-texture {
+            background: radial-gradient(circle at center, #2c1c11 0%, #1e1006 100%);
+            position: relative;
+        }
+        /* Custom scrollbar for Match History */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #433124;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "surface-bright": "#483529",
+                "surface-container-highest": "#433124",
+                "on-tertiary-container": "#b7b5b5",
+                "on-secondary-fixed-variant": "#474836",
+                "surface-container": "#2c1c11",
+                "surface-tint": "#ffb3ac",
+                "on-primary-fixed": "#410003",
+                "surface-container-high": "#38261a",
+                "on-tertiary": "#303030",
+                "tertiary-container": "#474747",
+                "inverse-surface": "#fbddca",
+                "tertiary": "#c8c6c5",
+                "on-tertiary-fixed-variant": "#474746",
+                "on-surface": "#fbddca",
+                "on-primary-fixed-variant": "#930010",
+                "surface-container-lowest": "#190b03",
+                "primary-fixed": "#ffdad6",
+                "surface-dim": "#1e1006",
+                "primary-container": "#930010",
+                "secondary": "#c8c8b0",
+                "secondary-fixed": "#e4e4cc",
+                "error": "#ffb4ab",
+                "tertiary-fixed-dim": "#c8c6c5",
+                "on-primary": "#680008",
+                "surface": "#1e1006",
+                "on-secondary-container": "#b9baa3",
+                "outline": "#9c8d89",
+                "on-error": "#690005",
+                "inverse-primary": "#ba1a20",
+                "secondary-fixed-dim": "#c8c8b0",
+                "on-secondary-fixed": "#1b1d0e",
+                "surface-variant": "#433124",
+                "surface-container-low": "#28180d",
+                "on-tertiary-fixed": "#1b1c1c",
+                "error-container": "#93000a",
+                "on-error-container": "#ffdad6",
+                "inverse-on-surface": "#3f2c20",
+                "on-background": "#fbddca",
+                "secondary-container": "#494a38",
+                "outline-variant": "#504441",
+                "on-surface-variant": "#d4c3be",
+                "tertiary-fixed": "#e5e2e1",
+                "primary": "#ffb3ac",
+                "background": "#1e1006",
+                "on-secondary": "#303221",
+                "on-primary-container": "#ff9a91",
+                "primary-fixed-dim": "#ffb3ac"
+              },
+              fontFamily: {
+                "headline": ["Noto Serif"],
+                "body": ["Manrope"],
+                "label": ["Manrope"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#1e1006] shadow-2xl shadow-[#190b03]/40">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-[#433124] transition-colors duration-300 p-2 rounded-lg" data-icon="menu">menu</button>
+<h1 class="text-2xl font-bold font-headline text-primary tracking-tight">The Scholar's Board</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8">
+<a class="text-primary font-bold transition-all duration-300" href="#">Match</a>
+<a class="text-secondary hover:text-on-surface transition-all duration-300" href="#">Academy</a>
+<a class="text-secondary hover:text-on-surface transition-all duration-300" href="#">Archive</a>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-[#433124] transition-colors duration-300 p-2 rounded-lg" data-icon="history_edu">history_edu</button>
+</div>
+</header>
+<main class="pt-24 pb-32 min-h-screen px-4 md:px-8 lg:px-12 flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+<!-- Left Column: Opponent & Tools -->
+<aside class="w-full lg:w-80 flex flex-col gap-6 order-2 lg:order-1">
+<!-- Player Card: Black (AI) -->
+<div class="bg-surface-container-low rounded-xl p-6 shadow-xl">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center border-2 border-outline-variant">
+<span class="material-symbols-outlined text-3xl text-secondary" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<h3 class="font-headline text-lg text-on-surface">Grandmaster AI</h3>
+<p class="text-xs font-label uppercase tracking-widest text-secondary">Level: Black • Hard</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-highest p-3 rounded-lg text-center">
+<p class="text-[10px] uppercase text-secondary font-label mb-1">Time Used</p>
+<p class="font-headline text-xl text-primary">00:14</p>
+</div>
+<div class="bg-surface-container-highest p-3 rounded-lg text-center">
+<p class="text-[10px] uppercase text-secondary font-label mb-1">Elo</p>
+<p class="font-headline text-xl text-primary">2850</p>
+</div>
+</div>
+<!-- Captured Pieces Container -->
+<div class="mt-6">
+<p class="text-[10px] uppercase text-secondary font-label mb-3">Captured Arsenal</p>
+<div class="flex flex-wrap gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-primary font-bold shadow-sm opacity-60">卒</div>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-primary font-bold shadow-sm opacity-60">馬</div>
+</div>
+</div>
+</div>
+<!-- Match Controls -->
+<div class="bg-surface-container-low rounded-xl p-6 shadow-xl flex flex-col gap-4">
+<button class="w-full py-3 bg-primary-container text-on-primary-container font-bold rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="restart_alt">restart_alt</span>
+                    New Campaign
+                </button>
+<div class="grid grid-cols-2 gap-3">
+<button class="py-2 bg-surface-variant text-on-surface font-semibold rounded-lg hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="pause">pause</span>
+                        Halt
+                    </button>
+<button class="py-2 bg-surface-variant text-on-surface font-semibold rounded-lg hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="undo">undo</span>
+                        Retract
+                    </button>
+</div>
+<div class="mt-2">
+<label class="text-[10px] uppercase text-secondary font-label mb-2 block">AI Rigor</label>
+<div class="flex bg-surface-container-highest p-1 rounded-lg">
+<button class="flex-1 py-1 text-xs font-bold text-secondary">Novice</button>
+<button class="flex-1 py-1 text-xs font-bold text-on-surface bg-surface-container rounded-md">Scholar</button>
+<button class="flex-1 py-1 text-xs font-bold text-secondary">Sage</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center Column: The Master Board -->
+<section class="flex-1 flex flex-col items-center order-1 lg:order-2">
+<div class="relative p-8 bg-surface-container-low rounded-2xl shadow-2xl border border-outline-variant/10">
+<!-- Board Texture and Grid -->
+<div class="wood-texture w-[320px] h-[360px] md:w-[480px] md:h-[540px] rounded shadow-inner p-4 flex flex-col justify-between relative overflow-hidden">
+<!-- SVG Grid Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" preserveaspectratio="none" viewbox="0 0 90 100">
+<!-- Horizontal Lines -->
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="5" y2="5"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="15" y2="15"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="25" y2="25"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="35" y2="35"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="45" y2="45"></line>
+<!-- River Gap -->
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="55" y2="55"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="65" y2="65"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="75" y2="75"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="85" y2="85"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="85" y1="95" y2="95"></line>
+<!-- Vertical Lines -->
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="5" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="5" x2="5" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="15" x2="15" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="15" x2="15" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="25" x2="25" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="25" x2="25" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="35" x2="35" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="35" x2="35" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="45" x2="45" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="45" x2="45" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="55" x2="55" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="55" x2="55" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="65" x2="65" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="65" x2="65" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="75" x2="75" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="75" x2="75" y1="55" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="85" x2="85" y1="5" y2="45"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="85" x2="85" y1="55" y2="95"></line>
+<!-- Palaces -->
+<line stroke="#fbddca" stroke-width="0.2" x1="35" x2="55" y1="5" y2="25"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="55" x2="35" y1="5" y2="25"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="35" x2="55" y1="75" y2="95"></line>
+<line stroke="#fbddca" stroke-width="0.2" x1="55" x2="35" y1="75" y2="95"></line>
+</svg>
+<!-- The River (Chu Han) -->
+<div class="absolute top-1/2 left-0 w-full -translate-y-1/2 flex justify-around items-center h-10 px-8 text-on-surface/40 font-headline pointer-events-none">
+<span class="text-xl md:text-3xl tracking-[1em]">楚河</span>
+<span class="text-xl md:text-3xl tracking-[1em]">漢界</span>
+</div>
+<!-- Pieces Layout (Simulation) -->
+<div class="absolute inset-0 grid grid-cols-9 grid-rows-10 p-2 md:p-4">
+<!-- Top Row (Black) -->
+<div class="relative group cursor-pointer">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10 transition-transform active:scale-90">車</div>
+</div>
+<div class="relative group">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10">馬</div>
+</div>
+<div class="relative group">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10">象</div>
+</div>
+<div class="relative group">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10">士</div>
+</div>
+<div class="relative group">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10">將</div>
+</div>
+<!-- Empty Grid Cells -->
+<div class="col-span-4"></div>
+<!-- Middle Pieces (Cannons) -->
+<div class="row-start-3 col-start-2 relative group">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-secondary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed font-bold text-xl md:text-2xl shadow-[0_4px_0_rgba(0,0,0,0.3)] ring-1 ring-black/10">砲</div>
+</div>
+<!-- Red Pieces (Bottom) -->
+<div class="row-start-10 col-start-5 relative group">
+<!-- Selected Piece Example -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] bg-secondary-fixed rounded-full flex items-center justify-center text-primary font-bold text-xl md:text-2xl shadow-[0_6px_0_rgba(147,0,16,0.5)] ring-2 ring-primary scale-110">帥</div>
+</div>
+<!-- Possible Move Indicator -->
+<div class="row-start-9 col-start-5 relative flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary/40 animate-pulse"></div>
+</div>
+<div class="row-start-8 col-start-5 relative flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary/40 animate-pulse"></div>
+</div>
+</div>
+</div>
+<!-- Coordinates Periphery -->
+<div class="absolute -left-6 top-8 bottom-8 flex flex-col justify-between text-[10px] text-secondary/40 font-mono">
+<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+</div>
+<div class="absolute -bottom-6 left-8 right-8 flex justify-between text-[10px] text-secondary/40 font-mono">
+<span>九</span><span>八</span><span>七</span><span>六</span><span>五</span><span>四</span><span>三</span><span>二</span><span>一</span>
+</div>
+</div>
+<!-- Match Status Banner -->
+<div class="mt-8 flex items-center gap-6">
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase font-label text-secondary mb-1">Current Turn</span>
+<div class="px-6 py-2 bg-primary-container/20 border border-primary/30 rounded-full text-primary font-bold animate-pulse">
+                        RED IN MOTION
+                    </div>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/30"></div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase font-label text-secondary mb-1">Game Pace</span>
+<span class="font-headline text-xl text-on-surface">Round 24</span>
+</div>
+</div>
+</section>
+<!-- Right Column: Match History -->
+<aside class="w-full lg:w-80 flex flex-col gap-6 order-3">
+<div class="bg-surface-container-low rounded-xl p-6 shadow-xl flex-1 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline text-lg text-on-surface">Match Ledger</h3>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="auto_stories">auto_stories</span>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-2">
+<!-- Move Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-highest rounded-lg border-l-4 border-primary group hover:bg-surface-bright transition-colors">
+<span class="text-[10px] font-label text-secondary w-4">12</span>
+<div class="flex-1">
+<p class="text-sm font-semibold text-on-surface">Red Cannon Forward 2</p>
+<p class="text-[10px] text-secondary uppercase tracking-tighter">砲二進二</p>
+</div>
+<span class="text-xs text-primary font-mono">+1.2</span>
+</div>
+<!-- Move Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-lg border-l-4 border-on-tertiary-fixed-variant group hover:bg-surface-bright transition-colors">
+<span class="text-[10px] font-label text-secondary w-4">11</span>
+<div class="flex-1">
+<p class="text-sm font-semibold text-on-surface">Black Knight to Center</p>
+<p class="text-[10px] text-secondary uppercase tracking-tighter">馬８進７</p>
+</div>
+<span class="text-xs text-secondary font-mono">0.0</span>
+</div>
+<!-- Repeat entries for scrollable feel -->
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-lg border-l-4 border-primary opacity-50">
+<span class="text-[10px] font-label text-secondary w-4">10</span>
+<div class="flex-1"><p class="text-sm">Red Elephant Left</p></div>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-lg border-l-4 border-on-tertiary-fixed-variant opacity-50">
+<span class="text-[10px] font-label text-secondary w-4">09</span>
+<div class="flex-1"><p class="text-sm">Black Advisor Up</p></div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/10">
+<button class="w-full py-2 text-xs font-label uppercase tracking-widest text-secondary hover:text-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-base" data-icon="file_download">file_download</span>
+                        Export SGF Record
+                    </button>
+</div>
+</div>
+<!-- Player Card: Red (User) -->
+<div class="bg-surface-container-low rounded-xl p-6 shadow-xl border-2 border-primary/20">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center border-2 border-primary shadow-[0_0_15px_rgba(147,0,16,0.3)]">
+<img alt="User" class="w-10 h-10" data-alt="minimalist avatar of a distinguished scholar with traditional spectacles and a serene expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi_rJoVBb0p3QgsmT_qTibWBowlh7YKeMNTIfhB4B2wuLtoU_G1rbLOTlEu22oyc5i6qm4XlhP3UVh6DBCSazKk0rpzAKqSv1t_3yE_LwqlXdprMfTvGMcOq8sYPmUGtBAJOB11-my-dLvZCS3BMnA4aV9OD7ORumE_bj8CkLpW-3cj316kFjK6mljzWRzFTmvBdhy9W7wXfQ0JGeIPmwAk6ashyL6Nxxti-btw4kp0X2IGTJXr_DCJO_9qkablHCZ5bFEsmO40Mw"/>
+</div>
+<div>
+<h3 class="font-headline text-lg text-on-surface">Grandmaster</h3>
+<p class="text-xs font-label uppercase tracking-widest text-primary">ELO 2450 • User</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-highest p-3 rounded-lg text-center">
+<p class="text-[10px] uppercase text-secondary font-label mb-1">Time Left</p>
+<p class="font-headline text-xl text-on-surface">08:42</p>
+</div>
+<div class="bg-surface-container-highest p-3 rounded-lg text-center">
+<p class="text-[10px] uppercase text-secondary font-label mb-1">Win Rate</p>
+<p class="font-headline text-xl text-on-surface">64%</p>
+</div>
+</div>
+</div>
+</aside>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-[#1e1006]/95 backdrop-blur-xl border-t border-[#fbddca]/15 shadow-[0_-8px_30px_rgb(0,0,0,0.12)]">
+<button class="flex flex-col items-center justify-center bg-[#433124] text-[#ffb3ac] rounded-xl px-5 py-2 ease-in-out duration-500">
+<span class="material-symbols-outlined" data-icon="grid_4x4">grid_4x4</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Match</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c8c8b0] px-5 py-2 hover:text-[#fbddca] transition-all duration-500">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Academy</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c8c8b0] px-5 py-2 hover:text-[#fbddca] transition-all duration-500">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Archive</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c8c8b0] px-5 py-2 hover:text-[#fbddca] transition-all duration-500">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-manrope text-[10px] uppercase tracking-widest mt-1">Settings</span>
+</button>
+</nav>
+<!-- Floating Action Button (Contextual: New Match) -->
+<button class="fixed right-6 bottom-24 md:bottom-8 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-2xl flex items-center justify-center scale-95 active:scale-90 transition-transform hover:brightness-110 z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</body></html>
